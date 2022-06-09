@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "job-listing-lufthansa": {
+      "hosting": {
+        "job-listing": [
+          "job-listing-lufthansa"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "job-listing-lufthansa"
+  }
+}
