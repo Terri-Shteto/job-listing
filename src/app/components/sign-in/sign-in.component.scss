@@ -1,0 +1,28 @@
+.c-sign-in {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    &__container {
+        max-width: 1280px;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        margin-left: auto;
+        margin-right: auto;
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    &__form {
+        height: 100%;
+        margin: 0 auto;
+        width: 300px;
+    }
+}
+
+.w-full {
+    width: 100%;
+}
