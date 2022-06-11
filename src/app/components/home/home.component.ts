@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Auth } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-home',
@@ -8,13 +7,9 @@ import { Auth } from '@angular/fire/auth';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private auth: Auth) { }
+  constructor() { }
 
   ngOnInit(): void {
-  }
-
-  public logout() {
-    this.auth.signOut();
   }
 
 }

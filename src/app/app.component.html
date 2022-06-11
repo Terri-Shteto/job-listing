@@ -1,1 +1,31 @@
-<router-outlet></router-outlet>
+<div class="app">
+    <mat-toolbar color="primary" class="example-toolbar">
+        <button mat-icon-button><mat-icon>menu</mat-icon></button>
+        <h1>Job Listing</h1>
+    </mat-toolbar>
+
+    <mat-sidenav-container class="app__container">
+        <mat-sidenav mode="side" opened>
+            <mat-nav-list [ngStyle]="{ width: '200px' }">
+                <a *ngIf="user" mat-list-item routerLink="">
+                    <button mat-icon-button><mat-icon mat-icon-button>home</mat-icon></button>
+                    <span>Home</span>
+                </a>
+
+                <a *ngIf="!user" mat-list-item routerLink="sign-in">
+                    <button mat-icon-button><mat-icon>login</mat-icon></button>
+                    <span>Sign in</span>
+                </a>
+
+                <a *ngIf="user" mat-list-item routerLink="sign-out">
+                    <button mat-icon-button><mat-icon>logout</mat-icon></button>
+                    <span>Sign out</span>
+                </a>
+            </mat-nav-list>
+        </mat-sidenav>
+
+        <mat-sidenav-content class="app__content">
+            <router-outlet style="display: none;"></router-outlet>
+        </mat-sidenav-content>
+    </mat-sidenav-container>
+</div>

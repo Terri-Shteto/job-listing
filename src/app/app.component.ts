@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Auth } from '@angular/fire/auth';
+import { Auth, User } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 
 @Component({
@@ -9,17 +9,22 @@ import { Router } from '@angular/router';
 })
 export class AppComponent {
   public title = 'job-listing';
+  public user: User|null = null;
 
-  constructor(private router: Router, private auth: Auth) {}
+  constructor(private router: Router, private auth: Auth) {
+  }
 
   protected ngOnInit() {
     this.auth.onAuthStateChanged((user) => {
+      this.user = user;
+
       if (!user) {
         return this.router.navigate(['sign-in']);
       }
 
       return this.router.navigate(['']);
     }, (error) => {
+      this.user = null;
       return this.router.navigate(['sign-in']);
     });
   }

@@ -1,0 +1,20 @@
+.app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    &__container,
+    &__content,
+    &__content > * {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        width: 100%;
+    }
+
+    // &__content > * {
+    //     flex: 1 1 auto;
+    // }
+}

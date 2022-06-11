@@ -8,6 +8,7 @@ import {
 
 import { HomeComponent } from './components/home/home.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
+import { SignOutComponent } from './components/sign-out/sign-out.component';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['sign-in']);
 const redirectLoggedInToHome = () => redirectLoggedInTo(['']);
@@ -22,6 +23,11 @@ const routes: Routes = [
     path: 'sign-in',
     component: SignInComponent,
     ...canActivate(redirectLoggedInToHome),
+  },
+  {
+    path: 'sign-out',
+    component: SignOutComponent,
+    ...canActivate(redirectUnauthorizedToLogin),
   },
 ];
 

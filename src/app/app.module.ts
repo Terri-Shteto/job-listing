@@ -8,8 +8,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
+import { MatIconModule } from '@angular/material/icon';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { environment } from '../environments/environment';
@@ -20,18 +24,24 @@ import { AppComponent } from './app.component';
 // Components
 import { SignInComponent } from './components/sign-in/sign-in.component';
 import { HomeComponent } from './components/home/home.component';
+import { SignOutComponent } from './components/sign-out/sign-out.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SignInComponent,
     HomeComponent,
+    SignOutComponent,
   ],
 
   imports: [
     BrowserModule,
+    MatListModule,
+    MatIconModule,
     MatInputModule,
     MatButtonModule,
+    MatToolbarModule,
+    MatSidenavModule,
     AppRoutingModule,
     MatSnackBarModule,
     MatFormFieldModule,
