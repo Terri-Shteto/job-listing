@@ -1,11 +1,11 @@
-<div class="c-sign-in">
-    <div class="c-sign-in__container">
+<div class="c-sign-up">
+    <div class="c-sign-up__container">
         <form
-            class="c-sign-in__form"
-            [formGroup]="signInForm"
-            (ngSubmit)="signIn()"
+            class="c-sign-up__form"
+            [formGroup]="signUpForm"
+            (ngSubmit)="signUp()"
         >
-            <h1>Sign in</h1>
+            <h1>Sign up</h1>
 
             <div class="w-full">
                 <mat-form-field appearance="outline" class="w-full">
@@ -47,13 +47,13 @@
                     class="w-full"
                     color="primary"
                     mat-raised-button
-                    [disabled]="signInForm.invalid"
-                >Sign In</button>
+                    [disabled]="signUpForm.invalid"
+                >Sign Up</button>
             </div>
 
-            <div class="c-sign-in__bg">
-                <div>Do not have an account yet?</div>
-                <div><a routerLink="/sign-up">Click here to sign up</a> instead.</div>
+            <div class="c-sign-up__bg">
+                <div>Already have an account?</div>
+                <div><a routerLink="/sign-in">Click here to sign in</a> instead.</div>
             </div>
         </form>
     </div>

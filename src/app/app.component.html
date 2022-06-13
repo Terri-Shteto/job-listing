@@ -17,6 +17,11 @@
                     <span>Sign in</span>
                 </a>
 
+                <a *ngIf="!user" mat-list-item routerLink="sign-up">
+                    <button mat-icon-button><mat-icon>person_add</mat-icon></button>
+                    <span>Sign up</span>
+                </a>
+
                 <a *ngIf="user" mat-list-item routerLink="sign-out">
                     <button mat-icon-button><mat-icon>logout</mat-icon></button>
                     <span>Sign out</span>

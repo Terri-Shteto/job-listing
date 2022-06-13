@@ -8,9 +8,10 @@ import {
 
 import { HomeComponent } from './components/home/home.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
+import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { SignOutComponent } from './components/sign-out/sign-out.component';
 
-const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['sign-in']);
+const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['sign-in', 'sign-up']);
 const redirectLoggedInToHome = () => redirectLoggedInTo(['']);
 
 const routes: Routes = [
@@ -22,6 +23,11 @@ const routes: Routes = [
   {
     path: 'sign-in',
     component: SignInComponent,
+    ...canActivate(redirectLoggedInToHome),
+  },
+  {
+    path: 'sign-up',
+    component: SignUpComponent,
     ...canActivate(redirectLoggedInToHome),
   },
   {
