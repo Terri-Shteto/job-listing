@@ -1,13 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
+import { FirebaseError } from '@angular/fire/app';
+import { Auth, createUserWithEmailAndPassword, UserCredential } from '@angular/fire/auth';
+import { Firestore, doc, setDoc } from '@angular/fire/firestore';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
-import {
-  Auth,
-  createUserWithEmailAndPassword,
-} from '@angular/fire/auth';
-
-import { FirebaseError } from 'firebase/app';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-sign-up',
@@ -19,6 +15,7 @@ export class SignUpComponent implements OnInit {
 
   constructor(
     private auth: Auth,
+    private firestore: Firestore,
     private snackBar: MatSnackBar,
     private formBuilder: FormBuilder,
   ) {
@@ -34,28 +31,40 @@ export class SignUpComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-  }
+  public ngOnInit(): void { }
 
   public signUp() {
     const { email, password } = this.signUpForm.value;
 
     createUserWithEmailAndPassword(this.auth, email, password)
-      .then((response) => {
-        return this.showSnackBar('Sign-up complete!');
-      })
-      .catch((error: FirebaseError) => {
-        if (error.code === 'auth/email-already-in-use') {
-          this.showSnackBar('This email is already in use!');
-        }
-
-        this.showSnackBar('Username or password is invalid!');
-
-        throw error;
-      });
+      .then(response => this.handleRegistrationSuccess(response))
+      .catch(error => this.handleRegistrationFailure(error))
+    ;
   }
 
-  public showSnackBar(message: string, action: string = '', options: MatSnackBarConfig<any> = {}) {
+  protected async handleRegistrationSuccess(response: UserCredential) {
+    const userId = response.user.uid;
+    const userRef = doc(this.firestore, `users/${userId}`);
+
+    await setDoc(userRef, {
+      role: 'recruiter',
+    });
+
+    this.showSnackBar('Sign-up complete!');
+  }
+
+  protected handleRegistrationFailure(error: FirebaseError) {
+    let message = 'Username or password is invalid!';
+
+    if (error.code === 'auth/email-already-in-use') {
+      message = 'This email is already in use!';
+    }
+
+    console.log({ error });
+    this.showSnackBar(message);
+  }
+
+  protected showSnackBar(message: string, action: string = '', options: MatSnackBarConfig<any> = {}) {
     this.snackBar.open(message, action, Object.assign({
       duration: 5000,
       verticalPosition: 'top',

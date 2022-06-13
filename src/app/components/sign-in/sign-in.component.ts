@@ -1,13 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
+import { FirebaseError } from '@angular/fire/app';
+import { Auth, signInWithEmailAndPassword, UserCredential } from '@angular/fire/auth';
+import { Firestore, doc, getDoc } from '@angular/fire/firestore';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
-import {
-  Auth,
-  signInWithEmailAndPassword,
-} from '@angular/fire/auth';
-
-import { FirebaseError } from 'firebase/app';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-sign-in',
@@ -19,6 +15,7 @@ export class SignInComponent implements OnInit {
 
   constructor(
     private auth: Auth,
+    private firestore: Firestore,
     private snackBar: MatSnackBar,
     private formBuilder: FormBuilder,
   ) {
@@ -34,22 +31,35 @@ export class SignInComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-  }
+  public ngOnInit(): void { }
 
   public signIn() {
     const { email, password } = this.signInForm.value;
 
     signInWithEmailAndPassword(this.auth, email, password)
-      .then((response) => {
-        this.showSnackBar('Sign-in complete!');
-      })
-      .catch((error: FirebaseError) => {
-        this.showSnackBar('Username or password is invalid!');
-      });
+      .then((response) => this.handleSignInSuccess(response))
+      .catch((error) => this.handleSignInFailure(error))
+    ;
   }
 
-  public showSnackBar(message: string, action: string = '', options: MatSnackBarConfig<any> = {}) {
+  protected async handleSignInSuccess(response: UserCredential) {
+    const userId = response.user.uid;
+    const userRef = doc(this.firestore, `users/${userId}`);
+
+    const userSnapshot = await getDoc(userRef);
+    const userData = userSnapshot.data();
+
+    console.log({ userData });
+
+    this.showSnackBar('Sign-in complete!');
+  }
+
+  protected handleSignInFailure(error: FirebaseError) {
+    console.log({ error });
+    this.showSnackBar('Username or password is invalid!');
+  }
+
+  protected showSnackBar(message: string, action: string = '', options: MatSnackBarConfig<any> = {}) {
     this.snackBar.open(message, action, Object.assign({
       duration: 5000,
       verticalPosition: 'top',
