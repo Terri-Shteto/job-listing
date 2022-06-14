@@ -1,11 +1,11 @@
 <div class="app">
     <mat-toolbar color="primary" class="example-toolbar">
-        <button mat-icon-button><mat-icon>menu</mat-icon></button>
+        <button mat-icon-button (click)="drawer.toggle()"><mat-icon>menu</mat-icon></button>
         <h1>Job Listing</h1>
     </mat-toolbar>
 
-    <mat-sidenav-container class="app__container">
-        <mat-sidenav mode="side" opened>
+    <mat-drawer-container hasBackdrop="false" class="app__container">
+        <mat-drawer #drawer mode="push" opened>
             <mat-nav-list [ngStyle]="{ width: '200px' }">
                 <a *ngIf="user" mat-list-item routerLink="">
                     <button mat-icon-button><mat-icon mat-icon-button>home</mat-icon></button>
@@ -27,10 +27,10 @@
                     <span>Sign out</span>
                 </a>
             </mat-nav-list>
-        </mat-sidenav>
+        </mat-drawer>
 
-        <mat-sidenav-content class="app__content">
+        <mat-drawer-content class="app__content">
             <router-outlet style="display: none;"></router-outlet>
-        </mat-sidenav-content>
-    </mat-sidenav-container>
+        </mat-drawer-content>
+    </mat-drawer-container>
 </div>
