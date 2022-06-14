@@ -11,7 +11,10 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
+import { MatTableModule } from '@angular/material/table';
+import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -26,6 +29,7 @@ import { HomeComponent } from './components/home/home.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { SignOutComponent } from './components/sign-out/sign-out.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -34,14 +38,18 @@ import { SignOutComponent } from './components/sign-out/sign-out.component';
     SignInComponent,
     SignUpComponent,
     SignOutComponent,
+    ProfileComponent,
   ],
 
   imports: [
     BrowserModule,
+    MatCardModule,
     MatListModule,
     MatIconModule,
+    MatTableModule,
     MatInputModule,
     MatButtonModule,
+    MatSelectModule,
     MatToolbarModule,
     MatSidenavModule,
     AppRoutingModule,

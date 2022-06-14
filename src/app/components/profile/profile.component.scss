@@ -1,0 +1,43 @@
+:host {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.c-profile {
+    height: 100%;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    &__container {
+        max-width: 1280px;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        margin-left: auto;
+        margin-right: auto;
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    &__form {
+        height: 100%;
+        margin: 0 auto;
+        width: 300px;
+    }
+
+    &__bg {
+        padding: 1rem 0.5rem;
+        margin-top: 1.5rem;
+        color: black;
+        background-color: lightgray;
+        border-radius: 0.25rem;
+    }
+}
+
+.w-full {
+    width: 100%;
+}

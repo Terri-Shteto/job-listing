@@ -4,12 +4,17 @@
         <h1>Job Listing</h1>
     </mat-toolbar>
 
-    <mat-drawer-container hasBackdrop="false" class="app__container">
-        <mat-drawer #drawer mode="push" opened>
-            <mat-nav-list [ngStyle]="{ width: '200px' }">
+    <mat-drawer-container hasBackdrop="true" class="app__container">
+        <mat-drawer #drawer mode="over">
+            <mat-nav-list (click)="drawer.close();" [ngStyle]="{ width: '200px' }">
                 <a *ngIf="user" mat-list-item routerLink="">
                     <button mat-icon-button><mat-icon mat-icon-button>home</mat-icon></button>
                     <span>Home</span>
+                </a>
+
+                <a *ngIf="user" mat-list-item routerLink="profile">
+                    <button mat-icon-button><mat-icon>person</mat-icon></button>
+                    <span>Profile</span>
                 </a>
 
                 <a *ngIf="!user" mat-list-item routerLink="sign-in">

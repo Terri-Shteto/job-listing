@@ -1,0 +1,54 @@
+<div class="c-profile">
+    <div class="c-profile__container">
+        <form
+            class="c-profile__form"
+            [formGroup]="profileForm"
+            (ngSubmit)="updateProfile()"
+        >
+            <h1>Update Profile</h1>
+
+            <div class="w-full">
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Phone number</mat-label>
+
+                    <input
+                        matInput
+                        type="phone"
+                        autocomplete="off"
+                        formControlName="phone"
+                    />
+
+                    <mat-hint *ngIf="getError('phone')" [ngStyle]="{ color: 'red' }">
+                        {{ getErrorMessage('phone') }}
+                    </mat-hint>
+                </mat-form-field>
+            </div>
+
+            <div class="w-full">
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Gender</mat-label>
+
+                    <mat-select formControlName="gender">
+                        <mat-option value="">Select</mat-option>
+                        <mat-option value="F">Female</mat-option>
+                        <mat-option value="M">Male</mat-option>
+                    </mat-select>
+
+                    <mat-hint *ngIf="getError('gender')" [ngStyle]="{ color: 'red' }">
+                        {{ getErrorMessage('gender') }}
+                    </mat-hint>
+                </mat-form-field>
+            </div>
+
+            <div class="w-full">
+                <button
+                    type="submit"
+                    class="w-full"
+                    color="primary"
+                    mat-raised-button
+                    [disabled]="profileForm.invalid"
+                >Update Profile</button>
+            </div>
+        </form>
+    </div>
+</div>
