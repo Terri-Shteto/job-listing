@@ -12,6 +12,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
@@ -19,6 +20,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatTabsModule } from '@angular/material/tabs';
+
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { environment } from '../environments/environment';
@@ -27,7 +29,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 // Components
-import { HomeComponent } from './components/home/home.component';
+import { HomeComponent, JobOfferDetailsDialog } from './components/home/home.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { SignOutComponent } from './components/sign-out/sign-out.component';
@@ -41,6 +43,7 @@ import { ProfileComponent } from './components/profile/profile.component';
     SignUpComponent,
     SignOutComponent,
     ProfileComponent,
+    JobOfferDetailsDialog,
   ],
 
   imports: [
@@ -52,6 +55,7 @@ import { ProfileComponent } from './components/profile/profile.component';
     MatTableModule,
     MatInputModule,
     MatButtonModule,
+    MatDialogModule,
     MatSelectModule,
     MatToolbarModule,
     MatSidenavModule,

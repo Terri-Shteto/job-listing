@@ -1,0 +1,11 @@
+<h2 mat-dialog-title>{{ data.jobOffer.companyName }}</h2>
+<mat-dialog-content class="mat-typography">
+  <h3>{{ data.jobOffer.role }}</h3>
+
+  <p>Required experience: {{ data.jobOffer.experience }}</p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="0">Close</button>
+  <button mat-button [mat-dialog-close]="1">Apply</button>
+</mat-dialog-actions>

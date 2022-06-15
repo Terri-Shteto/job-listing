@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Firestore, query, collection, addDoc, onSnapshot } from '@angular/fire/firestore';
 
 @Component({
@@ -22,6 +23,7 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private auth: Auth,
+    private dialog: MatDialog,
     private firestore: Firestore,
   ) { }
 
@@ -47,9 +49,31 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  public async applyForJob(event: MouseEvent, jobOfferId: string) {
-    console.log(jobOfferId, event);
+  public showJobOfferDetails(jobOfferId: string) {
+    const jobOffer = this.getJobOffer(jobOfferId);
+    console.log(jobOffer);
 
+    const dialogRef = this.dialog.open(JobOfferDetailsDialog, {
+      width: '768px',
+      data: {
+        jobOffer,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (!result) {
+        return;
+      }
+
+      this.applyForJob(jobOfferId);
+    });
+  }
+
+  public getJobOffer(jobOfferId: string) {
+    return this.jobOffers.find((jobOffer) => jobOffer.id === jobOfferId);
+  }
+
+  public async applyForJob(jobOfferId: string) {
     const userId = this.auth.currentUser?.uid;
     const jobApplicationsRef = collection(this.firestore, 'jobApplications');
 
@@ -68,4 +92,15 @@ export class HomeComponent implements OnInit {
     }) !== undefined;
   }
 
+}
+
+@Component({
+  selector: 'home-job-offer-details-dialog',
+  templateUrl: 'home-job-offer-details-dialog.html',
+})
+export class JobOfferDetailsDialog {
+  constructor(
+    public dialogRef: MatDialogRef<JobOfferDetailsDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+  ) {}
 }
