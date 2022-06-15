@@ -1,12 +1,16 @@
 .c-home {
-    padding: 3rem;
+    margin-top: 3rem;
+}
+
+.container {
     max-width: 1280px;
     margin: 0 auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
 }
 
 .table {
     width: 100%;
-    // border-collapse: collapse;
 }
 
 .scrollable {
@@ -18,7 +22,6 @@
     white-space: nowrap;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
-    // border: thin solid currentColor;
 }
 
 .mat-row:hover .mat-cell {
@@ -27,6 +30,6 @@
 
 @media (max-width: 576px) {
     .c-home {
-        padding: 1rem;
+        margin-top: 1rem;
     }
 }

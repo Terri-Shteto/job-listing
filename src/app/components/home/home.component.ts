@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
-import { Firestore, query, collection, getDocs } from '@angular/fire/firestore';
+import { Firestore, query, collection, addDoc, onSnapshot } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-home',
@@ -9,12 +9,14 @@ import { Firestore, query, collection, getDocs } from '@angular/fire/firestore';
 })
 export class HomeComponent implements OnInit {
   public jobOffers: any[] = [];
+  public jobApplications: any[] = [];
   public columns: { [key: string]: string } = {
     companyName: 'Company Name',
     role: 'Job Role',
     skills: 'Skills',
     type: 'Job Type',
     experience: 'Experience',
+    actions: 'Actions',
   };
   public columnKeys = Object.keys(this.columns);
 
@@ -26,16 +28,44 @@ export class HomeComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     const jobOfferCollection = collection(this.firestore, 'jobOffers');
     const jobOfferQuery = query(jobOfferCollection);
-    const jobOfferSnapshot = await getDocs(jobOfferQuery);
 
-    this.jobOffers = jobOfferSnapshot.docs.map((doc) => {
-      return {
-        id: doc.id,
-        ...doc.data(),
-      };
+    onSnapshot(jobOfferQuery, (querySnapshot) => {
+      this.jobOffers = querySnapshot.docs.map(docSnapshot => ({
+        id: docSnapshot.id,
+        ...docSnapshot.data(),
+      }));
     });
 
-    // console.log(this.jobOffers);
+    const jobApplicationCollection = collection(this.firestore, 'jobApplications');
+    const jobApplicationQuery = query(jobApplicationCollection);
+
+    onSnapshot(jobApplicationQuery, (querySnapshot) => {
+      this.jobApplications = querySnapshot.docs.map(docSnapshot => ({
+        id: docSnapshot.id,
+        ...docSnapshot.data(),
+      }));
+    });
+  }
+
+  public async applyForJob(event: MouseEvent, jobOfferId: string) {
+    console.log(jobOfferId, event);
+
+    const userId = this.auth.currentUser?.uid;
+    const jobApplicationsRef = collection(this.firestore, 'jobApplications');
+
+    await addDoc(jobApplicationsRef, {
+      userId,
+      jobOfferId,
+    });
+  }
+
+  public hasAppliedForJob(jobOfferId: string) {
+    return this.jobApplications.find((jobApplication) => {
+      const matchUser = jobApplication.userId === this.auth.currentUser?.uid;
+      const matchJobOffer = jobApplication.jobOfferId === jobOfferId;
+
+      return matchUser && matchJobOffer;
+    }) !== undefined;
   }
 
 }
