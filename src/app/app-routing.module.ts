@@ -6,11 +6,11 @@ import {
   redirectUnauthorizedTo,
 } from '@angular/fire/auth-guard';
 
-import { HomeComponent } from './components/home/home.component';
-import { SignInComponent } from './components/sign-in/sign-in.component';
-import { SignUpComponent } from './components/sign-up/sign-up.component';
-import { SignOutComponent } from './components/sign-out/sign-out.component';
-import { ProfileComponent } from './components/profile/profile.component';
+import { HomeComponent } from './screens/home/home.component';
+import { SignInComponent } from './screens/sign-in/sign-in.component';
+import { SignUpComponent } from './screens/sign-up/sign-up.component';
+import { SignOutComponent } from './screens/sign-out/sign-out.component';
+import { ProfileComponent } from './screens/profile/profile.component';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['sign-in', 'sign-up']);
 const redirectLoggedInToHome = () => redirectLoggedInTo(['']);

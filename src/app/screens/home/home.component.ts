@@ -17,7 +17,6 @@ export class HomeComponent implements OnInit {
     skills: 'Skills',
     type: 'Job Type',
     experience: 'Experience',
-    actions: 'Actions',
   };
   public columnKeys = Object.keys(this.columns);
 
