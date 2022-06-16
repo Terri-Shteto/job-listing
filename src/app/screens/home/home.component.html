@@ -1,36 +1,6 @@
-<section class="container">
-    <div class="c-home scrollable">
-        <table mat-table [dataSource]="jobOffers" class="table w-full mat-elevation-z8">
-            <ng-container *ngFor="let column of columns | keyvalue;" [matColumnDef]="column.key">
-                <th mat-header-cell *matHeaderCellDef>{{ column.value }}</th>
-
-                <td mat-cell *matCellDef="let jobOffer">{{ jobOffer[column.key] }}</td>
-            </ng-container>
-            <!-- <button
-                type="button"
-                color="primary"
-                mat-raised-button
-                (click)="applyForJob($event, jobOffer.id)"
-                [disabled]="hasAppliedForJob(jobOffer.id)"
-            >Apply</button> -->
-
-            <tr
-                mat-header-row
-                *matHeaderRowDef="columnKeys"
-                sticky
-            ></tr>
-
-            <tr
-                mat-row
-                *matRowDef="let row; columns: columnKeys;"
-                (click)="showJobOfferDetails(row.id)"
-            ></tr>
-        </table>
-    </div>
-
-    <mat-paginator
-        showFirstLastButtons
-        [pageSizeOptions]="[5, 10, 20]"
-        aria-label="Select page"
-    ></mat-paginator>
+<section class="c-home container">
+    <app-job-list-table
+        [jobOffers]="jobOffers"
+        (onJobOfferClick)="showJobOfferDetails($event)"
+    ></app-job-list-table>
 </section>

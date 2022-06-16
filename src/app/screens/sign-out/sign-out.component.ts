@@ -4,7 +4,7 @@ import { Auth } from '@angular/fire/auth';
 @Component({
   selector: 'app-sign-out',
   templateUrl: './sign-out.component.html',
-  styleUrls: ['./sign-out.component.scss']
+  styleUrls: ['./sign-out.component.scss'],
 })
 export class SignOutComponent implements OnInit {
 

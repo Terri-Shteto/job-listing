@@ -11,14 +11,7 @@ import { Firestore, query, collection, addDoc, onSnapshot } from '@angular/fire/
 export class HomeComponent implements OnInit {
   public jobOffers: any[] = [];
   public jobApplications: any[] = [];
-  public columns: { [key: string]: string } = {
-    companyName: 'Company Name',
-    role: 'Job Role',
-    skills: 'Skills',
-    type: 'Job Type',
-    experience: 'Experience',
-  };
-  public columnKeys = Object.keys(this.columns);
+  public dialogRef: MatDialogRef<JobOfferDetailsDialog>|null = null;
 
   constructor(
     private auth: Auth,
@@ -49,27 +42,30 @@ export class HomeComponent implements OnInit {
   }
 
   public showJobOfferDetails(jobOfferId: string) {
-    const jobOffer = this.getJobOffer(jobOfferId);
-    console.log(jobOffer);
-
-    const dialogRef = this.dialog.open(JobOfferDetailsDialog, {
+    this.dialogRef = this.dialog.open(JobOfferDetailsDialog, {
       width: '768px',
       data: {
-        jobOffer,
-      },
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (!result) {
-        return;
-      }
-
-      this.applyForJob(jobOfferId);
+        jobOffer: this.getJobOffer(jobOfferId),
+        onClick: this.handleModalClick.bind(this),
+      } as JobOfferDetailsDialogConfig,
     });
   }
 
   public getJobOffer(jobOfferId: string) {
     return this.jobOffers.find((jobOffer) => jobOffer.id === jobOfferId);
+  }
+
+  public handleModalClick(jobOfferId: string, action: string) {
+    switch (action) {
+      case 'apply':
+        this.applyForJob(jobOfferId);
+        break;
+      case 'favorite':
+        this.markAsFavorite(jobOfferId);
+        break;
+      default:
+        this.dialogRef?.close();
+    }
   }
 
   public async applyForJob(jobOfferId: string) {
@@ -80,6 +76,16 @@ export class HomeComponent implements OnInit {
       userId,
       jobOfferId,
     });
+
+    console.log('applying for job', jobOfferId);
+
+    this.dialogRef?.close();
+  }
+
+  public async markAsFavorite(jobOfferId: string) {
+    console.log('marking job as favorite', jobOfferId);
+
+    this.dialogRef?.close();
   }
 
   public hasAppliedForJob(jobOfferId: string) {
@@ -93,13 +99,18 @@ export class HomeComponent implements OnInit {
 
 }
 
+interface JobOfferDetailsDialogConfig {
+  jobOffer: any,
+  onClick: (jobOfferId: string, action: string) => void,
+}
+
 @Component({
-  selector: 'home-job-offer-details-dialog',
-  templateUrl: 'home-job-offer-details-dialog.html',
+  selector: 'job-offer-details-dialog',
+  templateUrl: '../../components/dialogs/job-offer-details-dialog.html',
 })
 export class JobOfferDetailsDialog {
   constructor(
     public dialogRef: MatDialogRef<JobOfferDetailsDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public data: JobOfferDetailsDialogConfig,
   ) {}
 }

@@ -11,15 +11,17 @@ import { SignInComponent } from './screens/sign-in/sign-in.component';
 import { SignUpComponent } from './screens/sign-up/sign-up.component';
 import { SignOutComponent } from './screens/sign-out/sign-out.component';
 import { ProfileComponent } from './screens/profile/profile.component';
+import { JobOffersComponent } from './screens/job-offers/job-offers.component';
 
-const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['sign-in', 'sign-up']);
+const redirectUnauthenticatedToLogin = () => redirectUnauthorizedTo(['sign-in', 'sign-up']);
+// const redirectUnauthorizedHome = () => redirectUnauthorizedTo(['']);
 const redirectLoggedInToHome = () => redirectLoggedInTo(['']);
 
 const routes: Routes = [
   {
     path: '',
     component: HomeComponent,
-    ...canActivate(redirectUnauthorizedToLogin),
+    ...canActivate(redirectUnauthenticatedToLogin),
   },
   {
     path: 'sign-in',
@@ -34,12 +36,17 @@ const routes: Routes = [
   {
     path: 'sign-out',
     component: SignOutComponent,
-    ...canActivate(redirectUnauthorizedToLogin),
+    ...canActivate(redirectUnauthenticatedToLogin),
   },
   {
     path: 'profile',
     component: ProfileComponent,
-    ...canActivate(redirectUnauthorizedToLogin),
+    ...canActivate(redirectUnauthenticatedToLogin),
+  },
+  {
+    path: 'job-offers',
+    component: JobOffersComponent,
+    ...canActivate(redirectUnauthenticatedToLogin),
   },
 ];
 

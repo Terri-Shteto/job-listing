@@ -17,6 +17,11 @@
                     <span>Profile</span>
                 </a>
 
+                <a *ngIf="user && userData['role'] === 'recruiter'" mat-list-item routerLink="job-offers">
+                    <button mat-icon-button><mat-icon>work</mat-icon></button>
+                    <span>Job Offers</span>
+                </a>
+
                 <a *ngIf="!user" mat-list-item routerLink="sign-in">
                     <button mat-icon-button><mat-icon>login</mat-icon></button>
                     <span>Sign in</span>

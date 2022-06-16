@@ -8,7 +8,7 @@ import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-sign-up',
   templateUrl: './sign-up.component.html',
-  styleUrls: ['./sign-up.component.scss']
+  styleUrls: ['./sign-up.component.scss'],
 })
 export class SignUpComponent implements OnInit {
   public signUpForm: FormGroup;
@@ -47,7 +47,7 @@ export class SignUpComponent implements OnInit {
     const userRef = doc(this.firestore, `users/${userId}`);
 
     await setDoc(userRef, {
-      role: 'recruiter',
+      role: 'seeker',
     });
 
     this.showSnackBar('Sign-up complete!');

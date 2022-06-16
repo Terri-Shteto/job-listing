@@ -1,6 +1,7 @@
+import { Router } from '@angular/router';
 import { Component } from '@angular/core';
 import { Auth, User } from '@angular/fire/auth';
-import { Router } from '@angular/router';
+import { Firestore, doc, getDoc, DocumentData } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-root',
@@ -10,13 +11,19 @@ import { Router } from '@angular/router';
 export class AppComponent {
   public title = 'job-listing';
   public user: User|null = null;
+  public userData: DocumentData = {};
 
-  constructor(private router: Router, private auth: Auth) {
+  constructor(
+    private auth: Auth,
+    private router: Router,
+    private firestore: Firestore,
+    ) {
   }
 
   protected ngOnInit() {
-    this.auth.onAuthStateChanged((user) => {
+    this.auth.onAuthStateChanged(async (user) => {
       this.user = user;
+      this.userData = await this.getUserData(this.user?.uid);
 
       if (!user) {
         return this.router.navigate(['sign-in']);
@@ -25,8 +32,20 @@ export class AppComponent {
       return this.router.navigate(['']);
     }, (error) => {
       this.user = null;
+      this.userData = {};
+
       return this.router.navigate(['sign-in']);
     });
   }
 
+  public async getUserData(userId: string|undefined) {
+    if (!userId) {
+      return {};
+    }
+
+    const userRef = doc(this.firestore, `users/${userId}`);
+    const userSnapshot = await getDoc(userRef);
+
+    return userSnapshot.data() || {};
+  }
 }

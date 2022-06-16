@@ -1,4 +1,5 @@
 <h2 mat-dialog-title>{{ data.jobOffer.companyName }}</h2>
+
 <mat-dialog-content class="mat-typography">
   <h3>{{ data.jobOffer.role }}</h3>
 
@@ -6,6 +7,7 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-button [mat-dialog-close]="0">Close</button>
-  <button mat-button [mat-dialog-close]="1">Apply</button>
+  <button mat-button mat-dialog-close>Close</button>
+  <button mat-button (click)="data.onClick(data.jobOffer.id, 'apply')">Apply</button>
+  <button mat-button (click)="data.onClick(data.jobOffer.id, 'favorite')">Mark as favorite</button>
 </mat-dialog-actions>

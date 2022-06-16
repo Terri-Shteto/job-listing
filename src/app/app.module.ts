@@ -20,29 +20,37 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatTabsModule } from '@angular/material/tabs';
-
 import { ReactiveFormsModule } from '@angular/forms';
 
+// Local imports.
 import { environment } from '../environments/environment';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-// Components
+// Screen imports.
 import { HomeComponent, JobOfferDetailsDialog } from './screens/home/home.component';
 import { SignInComponent } from './screens/sign-in/sign-in.component';
 import { SignUpComponent } from './screens/sign-up/sign-up.component';
 import { SignOutComponent } from './screens/sign-out/sign-out.component';
 import { ProfileComponent } from './screens/profile/profile.component';
+import { JobOffersComponent } from './screens/job-offers/job-offers.component';
+
+// Component imports.
+import { JobListTableComponent } from './components/job-list-table/job-list-table.component';
 
 @NgModule({
   declarations: [
+    // Screens.
     AppComponent,
     HomeComponent,
     SignInComponent,
     SignUpComponent,
     SignOutComponent,
     ProfileComponent,
+    JobOffersComponent,
+
+    // Components.
+    JobListTableComponent,
     JobOfferDetailsDialog,
   ],
 
