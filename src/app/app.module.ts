@@ -19,6 +19,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
+import { MatSortModule } from '@angular/material/sort';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -34,6 +35,7 @@ import { SignUpComponent } from './screens/sign-up/sign-up.component';
 import { SignOutComponent } from './screens/sign-out/sign-out.component';
 import { ProfileComponent } from './screens/profile/profile.component';
 import { JobOffersComponent } from './screens/job-offers/job-offers.component';
+import { JobApplicationsComponent, JobApplicationDetailsDialog } from './screens/job-applications/job-applications.component';
 
 // Component imports.
 import { JobListTableComponent } from './components/job-list-table/job-list-table.component';
@@ -48,10 +50,12 @@ import { JobListTableComponent } from './components/job-list-table/job-list-tabl
     SignOutComponent,
     ProfileComponent,
     JobOffersComponent,
+    JobApplicationsComponent,
 
     // Components.
     JobListTableComponent,
     JobOfferDetailsDialog,
+    JobApplicationDetailsDialog,
   ],
 
   imports: [
@@ -59,6 +63,7 @@ import { JobListTableComponent } from './components/job-list-table/job-list-tabl
     MatCardModule,
     MatIconModule,
     MatListModule,
+    MatSortModule,
     MatTabsModule,
     MatTableModule,
     MatInputModule,
