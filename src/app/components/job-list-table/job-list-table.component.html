@@ -1,7 +1,17 @@
-<mat-form-field appearance="standard">
-    <mat-label>Filter</mat-label>
-    <input matInput (keyup)="applyFilter($event)" placeholder="Eg.: Company XYZ" #jobFilter />
-</mat-form-field>
+<div class="table-actions">
+    <div class="table-actions-left">
+        <mat-form-field appearance="standard">
+            <mat-label>Filter</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="Eg.: Company XYZ" #jobFilter />
+        </mat-form-field>
+
+        <ng-content select="[actions-left]"></ng-content>
+    </div>
+
+    <div class="table-actions-right">
+        <ng-content select="[actions-right]"></ng-content>
+    </div>
+</div>
 
 <div class="scrollable">
     <table mat-table #table fixedLayout matSort [dataSource]="dataSource" class="table w-full mat-elevation-z8">

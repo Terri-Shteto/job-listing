@@ -1,0 +1,81 @@
+<h2 mat-dialog-title>{{ data.jobOffer?.companyName || "Add new job" }}</h2>
+
+<mat-dialog-content class="mat-typography">
+    <form
+        [formGroup]="jobForm"
+        (ngSubmit)="submitForm()"
+        style="display: flex; flex-direction: column;"
+    >
+        <mat-form-field appearance="outline">
+            <mat-label>Company Name</mat-label>
+            <input formControlName="companyName" matInput placeholder="Company Name" />
+            <mat-hint *ngIf="getError('companyName')" [ngStyle]="{ color: 'red' }">{{ getErrorMessage('companyName') }}</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Experience</mat-label>
+            <input formControlName="experience" matInput placeholder="Experience" />
+            <mat-hint *ngIf="getError('experience')" [ngStyle]="{ color: 'red' }">{{ getErrorMessage('experience') }}</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Role</mat-label>
+            <input formControlName="role" matInput placeholder="Role" />
+            <mat-hint *ngIf="getError('role')" [ngStyle]="{ color: 'red' }">{{ getErrorMessage('role') }}</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Skills</mat-label>
+            <input formControlName="skills" matInput placeholder="Skills" />
+            <mat-hint *ngIf="getError('skills')" [ngStyle]="{ color: 'red' }">{{ getErrorMessage('skills') }}</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Type</mat-label>
+            <input formControlName="type" matInput placeholder="Type" />
+            <mat-hint *ngIf="getError('type')" [ngStyle]="{ color: 'red' }">{{ getErrorMessage('type') }}</mat-hint>
+        </mat-form-field>
+
+        <button
+            #jobOfferFormSubmit
+            type="submit"
+            class="w-full"
+            color="primary"
+            mat-raised-button
+            style="display: none;"
+        >Submit</button>
+    </form>
+</mat-dialog-content>
+
+<div style="display: flex; justify-content: space-between; align-items: flex-end;">
+    <mat-dialog-actions align="start" style="flex: 1 1 auto;">
+        <button
+            color="warn"
+            mat-button
+            mat-stroked-button
+            mat-dialog-close
+        >Cancel</button>
+    </mat-dialog-actions>
+
+    <mat-dialog-actions align="end" style="flex: 1 1 auto;">
+        <button
+            mat-button
+            mat-flat-button
+            mat-dialog-close
+            color="primary"
+            *ngIf="!data.jobOffer"
+            [disabled]="jobForm.invalid"
+            (click)="jobOfferFormSubmit._elementRef.nativeElement.click();"
+        >Create</button>
+
+        <button
+            mat-button
+            mat-flat-button
+            mat-dialog-close
+            color="primary"
+            *ngIf="data.jobOffer"
+            [disabled]="jobForm.invalid"
+            (click)="jobOfferFormSubmit._elementRef.nativeElement.click();"
+        >Update</button>
+    </mat-dialog-actions>
+</div>

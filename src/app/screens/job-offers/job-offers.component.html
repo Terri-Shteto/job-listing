@@ -3,7 +3,15 @@
 
     <app-job-list-table
         [jobOffers]="jobOffers"
-    ></app-job-list-table>
+        (onJobOfferClick)="showJobOfferForm($event)"
+    >
+        <div actions-right class="c-job-offers__actions">
+            <button
+                mat-button
+                mat-flat-button
+                color="primary"
+                (click)="showJobOfferForm()"
+            >Add new Job Offer</button>
+        </div>
+    </app-job-list-table>
 </section>
-
-<!-- (onJobOfferClick)="showJobOfferDetails($event)" -->

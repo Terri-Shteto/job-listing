@@ -1,5 +1,10 @@
 .c-job-offers {
     margin-top: 3rem;
+
+    &__actions {
+        margin-bottom: 1rem;
+        text-align: right;
+    }
 }
 
 @media (max-width: 576px) {

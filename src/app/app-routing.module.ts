@@ -12,6 +12,7 @@ import { SignUpComponent } from './screens/sign-up/sign-up.component';
 import { SignOutComponent } from './screens/sign-out/sign-out.component';
 import { ProfileComponent } from './screens/profile/profile.component';
 import { JobOffersComponent } from './screens/job-offers/job-offers.component';
+import { JobFavoritesComponent } from './screens/job-favorites/job-favorites.component';
 import { JobApplicationsComponent } from './screens/job-applications/job-applications.component';
 
 const redirectUnauthenticatedToLogin = () => redirectUnauthorizedTo(['sign-in', 'sign-up']);
@@ -47,6 +48,11 @@ const routes: Routes = [
   {
     path: 'job-offers',
     component: JobOffersComponent,
+    ...canActivate(redirectUnauthenticatedToLogin),
+  },
+  {
+    path: 'job-favorites',
+    component: JobFavoritesComponent,
     ...canActivate(redirectUnauthenticatedToLogin),
   },
   {

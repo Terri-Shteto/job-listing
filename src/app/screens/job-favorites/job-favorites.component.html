@@ -1,0 +1,8 @@
+<section class="c-job-favorites container">
+    <h1>My favorites</h1>
+
+    <app-job-list-table
+        [jobOffers]="jobOffers"
+        (onJobOfferClick)="showJobOfferDetails($event)"
+    ></app-job-list-table>
+</section>

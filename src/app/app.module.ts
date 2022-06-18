@@ -35,7 +35,8 @@ import { SignInComponent } from './screens/sign-in/sign-in.component';
 import { SignUpComponent } from './screens/sign-up/sign-up.component';
 import { SignOutComponent } from './screens/sign-out/sign-out.component';
 import { ProfileComponent } from './screens/profile/profile.component';
-import { JobOffersComponent } from './screens/job-offers/job-offers.component';
+import { JobOffersComponent, JobOfferFormDialog } from './screens/job-offers/job-offers.component';
+import { JobFavoritesComponent, JobFavoriteDetailsDialog } from './screens/job-favorites/job-favorites.component';
 import { JobApplicationsComponent, JobApplicationDetailsDialog } from './screens/job-applications/job-applications.component';
 
 // Component imports.
@@ -51,11 +52,14 @@ import { JobListTableComponent } from './components/job-list-table/job-list-tabl
     SignOutComponent,
     ProfileComponent,
     JobOffersComponent,
+    JobFavoritesComponent,
     JobApplicationsComponent,
 
     // Components.
     JobListTableComponent,
+    JobOfferFormDialog,
     JobOfferDetailsDialog,
+    JobFavoriteDetailsDialog,
     JobApplicationDetailsDialog,
   ],
 
