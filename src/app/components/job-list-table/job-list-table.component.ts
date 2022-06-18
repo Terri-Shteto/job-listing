@@ -35,7 +35,7 @@ export class JobListTableComponent implements OnInit, AfterViewInit, OnChanges {
   public ngOnChanges(changes: SimpleChanges) {
     this.jobOffers = changes['jobOffers'].currentValue;
     this.dataSource.data = this.jobOffers;
-}
+  }
 
   public ngAfterViewInit(): void {
     this.dataSource.sort = this.sort;

@@ -28,6 +28,9 @@ export class SignUpComponent implements OnInit {
         Validators.required,
         Validators.minLength(6),
       ])],
+      role: ['', Validators.compose([
+        Validators.required,
+      ])],
     });
   }
 
@@ -45,9 +48,10 @@ export class SignUpComponent implements OnInit {
   protected async handleRegistrationSuccess(response: UserCredential) {
     const userId = response.user.uid;
     const userRef = doc(this.firestore, `users/${userId}`);
+    const formData = this.signUpForm.value;
 
     await setDoc(userRef, {
-      role: 'seeker',
+      role: formData.role,
     });
 
     this.showSnackBar('Sign-up complete!');
@@ -96,6 +100,9 @@ export class SignUpComponent implements OnInit {
       password: {
         required: 'Password is required',
         minlength: 'Password must less than 6 characters!',
+      },
+      role: {
+        required: 'Role is required',
       },
     }[controlName] as any)[errorName] || 'Invalid field!';
   }

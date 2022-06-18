@@ -42,6 +42,19 @@
             </div>
 
             <div class="w-full">
+                <label class="role-radio-label">Sign up as:</label>
+
+                <mat-radio-group class="role-radio-group" aria-label="Select an option" formControlName="role">
+                    <mat-radio-button class="role-radio-button" value="seeker">Job Seeker</mat-radio-button>
+                    <mat-radio-button class="role-radio-button" value="recruiter">Recruiter</mat-radio-button>
+                </mat-radio-group>
+
+                <mat-hint *ngIf="getError('role')" [ngStyle]="{ color: 'red' }">
+                    {{ getErrorMessage('role') }}
+                </mat-hint>
+            </div>
+
+            <div class="w-full">
                 <button
                     type="submit"
                     class="w-full"

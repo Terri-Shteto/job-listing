@@ -15,6 +15,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -65,8 +66,9 @@ import { JobListTableComponent } from './components/job-list-table/job-list-tabl
     MatListModule,
     MatSortModule,
     MatTabsModule,
-    MatTableModule,
     MatInputModule,
+    MatRadioModule,
+    MatTableModule,
     MatButtonModule,
     MatDialogModule,
     MatSelectModule,
