@@ -1,4 +1,24 @@
 .c-job-offer-details {
+    &__title {
+        text-align: center;
+    }
+
+    &__row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    &__col {
+        flex: 0 0 50%;
+        margin-bottom: 1rem;
+
+        &:first-child {
+            font-weight: bold;
+            text-decoration: underline;
+        }
+    }
+
     &__actions {
         display: flex;
         justify-content: space-between;
@@ -17,6 +37,10 @@
 
 @media (max-width: 576px) {
     .c-job-offer-details {
+        &__col {
+            flex: 0 0 100%;
+        }
+
         &__actions {
             &-group {
                 padding: 0.75rem 0;

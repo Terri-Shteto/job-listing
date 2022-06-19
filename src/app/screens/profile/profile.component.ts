@@ -20,20 +20,20 @@ export class ProfileComponent implements OnInit {
     private formBuilder: FormBuilder,
   ) {
     this.profileForm = this.formBuilder.group({
-      firstName: [this.appService.userData.firstName || '', Validators.compose([
+      firstName: [this.appService.userData?.get('firstName') || '', Validators.compose([
         Validators.required,
       ])],
-      lastName: [this.appService.userData.lastName || '', Validators.compose([
+      lastName: [this.appService.userData?.get('lastName') || '', Validators.compose([
         Validators.required,
       ])],
-      email: [this.appService.userData.email || this.appService.user?.email || '', Validators.compose([
+      email: [this.appService.userData?.get('email') || this.appService.user?.email || '', Validators.compose([
         Validators.required,
         Validators.email,
       ])],
-      phone: [this.appService.userData.phone || '', Validators.compose([
+      phone: [this.appService.userData?.get('phone') || '', Validators.compose([
         Validators.required,
       ])],
-      gender: [this.appService.userData.gender || '', Validators.compose([])],
+      gender: [this.appService.userData?.get('gender') || '', Validators.compose([])],
     });
   }
 

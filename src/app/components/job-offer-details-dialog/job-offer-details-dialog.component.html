@@ -1,9 +1,62 @@
-<h2 mat-dialog-title>{{ data.jobOffer.companyName }}</h2>
-
 <mat-dialog-content class="mat-typography">
-    <h3>{{ data.jobOffer.role }}</h3>
+    <div class="c-job-offer-details__content">
+        <h2 mat-dialog-title class="c-job-offer-details__title">Job Offer Information</h2>
 
-    <p>Required experience: {{ data.jobOffer.experience }}</p>
+        <div class="c-job-offer-details__row">
+            <div class="c-job-offer-details__col">Company</div>
+            <div class="c-job-offer-details__col">{{ data.jobOffer.companyName }}</div>
+        </div>
+
+        <div class="c-job-offer-details__row">
+            <div class="c-job-offer-details__col">Experience</div>
+            <div class="c-job-offer-details__col">{{ data.jobOffer.experience }}</div>
+        </div>
+
+        <div class="c-job-offer-details__row">
+            <div class="c-job-offer-details__col">Role</div>
+            <div class="c-job-offer-details__col">{{ data.jobOffer.role }}</div>
+        </div>
+
+        <div class="c-job-offer-details__row">
+            <div class="c-job-offer-details__col">Skills</div>
+            <div class="c-job-offer-details__col">{{ data.jobOffer.skills }}</div>
+        </div>
+
+        <div class="c-job-offer-details__row">
+            <div class="c-job-offer-details__col">Type</div>
+            <div class="c-job-offer-details__col">{{ data.jobOffer.type }}</div>
+        </div>
+    </div>
+
+    <div *ngIf="!loading && showApplicantData()" class="c-job-offer-details-applicant__content">
+        <hr />
+        <h2 mat-dialog-title class="c-job-offer-details__title">Applicant information</h2>
+
+        <div class="c-job-offer-details__row">
+            <div class="c-job-offer-details__col">First Name</div>
+            <div class="c-job-offer-details__col">{{ seeker?.get('firstName') }}</div>
+        </div>
+
+        <div class="c-job-offer-details__row">
+            <div class="c-job-offer-details__col">Last Name</div>
+            <div class="c-job-offer-details__col">{{ seeker?.get('lastName') }}</div>
+        </div>
+
+        <div class="c-job-offer-details__row">
+            <div class="c-job-offer-details__col">Email</div>
+            <div class="c-job-offer-details__col">{{ seeker?.get('email') }}</div>
+        </div>
+
+        <div class="c-job-offer-details__row">
+            <div class="c-job-offer-details__col">Phone</div>
+            <div class="c-job-offer-details__col">{{ seeker?.get('phone') }}</div>
+        </div>
+
+        <div class="c-job-offer-details__row">
+            <div class="c-job-offer-details__col">Gender</div>
+            <div class="c-job-offer-details__col">{{ getGenderLabel(seeker?.get('gender')) }}</div>
+        </div>
+    </div>
 </mat-dialog-content>
 
 <div class="c-job-offer-details__actions" [ngStyle]="{ visibility: loading ? 'hidden' : 'visible' }">

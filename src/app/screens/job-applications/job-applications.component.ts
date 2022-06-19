@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { onSnapshot, QueryConstraint, where } from '@angular/fire/firestore';
+import { DocumentData, onSnapshot, QueryConstraint, QueryDocumentSnapshot, where } from '@angular/fire/firestore';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 import { AppService } from 'src/app/app.service';
@@ -15,7 +15,7 @@ import {
 })
 export class JobApplicationsComponent implements OnInit {
   public jobOffers: any[] = [];
-  public jobApplications: string[] = [];
+  public jobApplications: QueryDocumentSnapshot<DocumentData>[] = [];
   public dialogRef: MatDialogRef<JobOfferDetailsDialogComponent>|null = null;
 
   constructor(
@@ -24,7 +24,7 @@ export class JobApplicationsComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-    const role = this.appService.userData.role;
+    const role = this.appService.userData?.get('role');
 
     switch (role) {
       case 'seeker':
@@ -60,9 +60,7 @@ export class JobApplicationsComponent implements OnInit {
     const jobApplicationQuery = this.appService.jobApplicationQuery(filters);
 
     onSnapshot(jobApplicationQuery, (querySnapshot) => {
-      this.jobApplications = querySnapshot.docs.map((docSnapshot) => {
-        return docSnapshot.get('jobOfferId');
-      });
+      this.jobApplications = querySnapshot.docs;
 
       this.getJobOffers();
     });
@@ -74,14 +72,20 @@ export class JobApplicationsComponent implements OnInit {
     }
 
     const jobOfferQuery = this.appService.jobOfferQuery([
-      where('__name__', 'in', this.jobApplications),
+      where('__name__', 'in', this.jobApplications.map((jobApplication) => jobApplication.get('jobOfferId'))),
     ]);
 
     onSnapshot(jobOfferQuery, (querySnapshot) => {
-      this.jobOffers = querySnapshot.docs.map((docSnapshot) => {
+      this.jobOffers = querySnapshot.docs;
+
+      this.jobOffers = this.jobApplications.map((jobApplication) => {
+        const jobApplicationId = jobApplication.id;
+        const jobOfferId = jobApplication.get('jobOfferId');
+
         return {
-          id: docSnapshot.id,
-          ...docSnapshot.data(),
+          id: jobOfferId,
+          jobApplicationId: jobApplicationId,
+          ...this.getJobOffer(jobOfferId)?.data(),
         };
       });
     });

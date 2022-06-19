@@ -1,19 +1,20 @@
 import { Injectable } from '@angular/core';
-import { Auth, User } from '@angular/fire/auth';
+import { Auth, Unsubscribe, User } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { updateDoc } from 'firebase/firestore';
 
 import {
   Firestore,
+  DocumentData,
   QueryConstraint,
+  DocumentSnapshot,
   collection,
   query,
+  where,
   doc,
-  getDoc,
   addDoc,
   deleteDoc,
-  where,
-  getDocs,
+  onSnapshot,
   collectionSnapshots,
 } from '@angular/fire/firestore';
 
@@ -22,7 +23,9 @@ import {
 })
 export class AppService {
   public user: User|null = null;
-  public userData: any = {};
+  public userData: DocumentSnapshot<DocumentData>|null = null;
+
+  protected userDataSnapshotUnsubscribe: Unsubscribe|null = null;
 
   constructor(
     public auth: Auth,
@@ -31,7 +34,7 @@ export class AppService {
   ) {
     this.auth.onAuthStateChanged(async (user) => {
       this.user = user;
-      this.userData = await this.getUserData(this.user?.uid);
+      this.getUserData(this.user?.uid);
 
       if (!user) {
         return this.router.navigate(['sign-in']);
@@ -40,7 +43,7 @@ export class AppService {
       return this.router.navigate(['']);
     }, (error) => {
       this.user = null;
-      this.userData = {};
+      this.getUserData(undefined); // Remove user data.
 
       return this.router.navigate(['sign-in']);
     });
@@ -48,13 +51,15 @@ export class AppService {
 
   protected async getUserData(userId: string|undefined) {
     if (!userId) {
-      return {};
+      this.userData = null;
+      this.userDataSnapshotUnsubscribe?.();
     }
 
     const userRef = doc(this.firestore, `users/${userId}`);
-    const userSnapshot = await getDoc(userRef);
 
-    return userSnapshot.data() || {};
+    this.userDataSnapshotUnsubscribe = onSnapshot(userRef, (snapshot) => {
+      this.userData = snapshot;
+    });
   }
 
   // Job Offers
