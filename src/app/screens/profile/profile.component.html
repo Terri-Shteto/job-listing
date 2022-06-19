@@ -2,27 +2,30 @@
     <mat-tab label="Update profile">
         <div class="c-profile">
             <div class="c-profile__container">
-                <form
-                    class="c-profile__form"
-                    [formGroup]="profileForm"
-                    (ngSubmit)="updateProfile()"
-                >
-                    <h1 [ngStyle]="{ paddingTop: '2rem' }">Update Profile</h1>
+                <form [formGroup]="profileForm" (ngSubmit)="updateProfile()" class="c-profile__form">
+                    <h1 class="c-profile__header">Update Profile</h1>
+
+                    <div class="w-full">
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>First name</mat-label>
+                            <input matInput type="text" autocomplete="off" formControlName="firstName" />
+                            <mat-hint *ngIf="getError('firstName')" class="c-profile__error">{{ getErrorMessage('firstName') }}</mat-hint>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="w-full">
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Last name</mat-label>
+                            <input matInput type="text" autocomplete="off" formControlName="lastName" />
+                            <mat-hint *ngIf="getError('lastName')" class="c-profile__error">{{ getErrorMessage('lastName') }}</mat-hint>
+                        </mat-form-field>
+                    </div>
 
                     <div class="w-full">
                         <mat-form-field appearance="outline" class="w-full">
                             <mat-label>Phone number</mat-label>
-
-                            <input
-                                matInput
-                                type="phone"
-                                autocomplete="off"
-                                formControlName="phone"
-                            />
-
-                            <mat-hint *ngIf="getError('phone')" [ngStyle]="{ color: 'red' }">
-                                {{ getErrorMessage('phone') }}
-                            </mat-hint>
+                            <input matInput type="phone" autocomplete="off" formControlName="phone" />
+                            <mat-hint *ngIf="getError('phone')" class="c-profile__error">{{ getErrorMessage('phone') }}</mat-hint>
                         </mat-form-field>
                     </div>
 
@@ -36,9 +39,7 @@
                                 <mat-option value="M">Male</mat-option>
                             </mat-select>
 
-                            <mat-hint *ngIf="getError('gender')" [ngStyle]="{ color: 'red' }">
-                                {{ getErrorMessage('gender') }}
-                            </mat-hint>
+                            <mat-hint *ngIf="getError('gender')" class="c-profile__error">{{ getErrorMessage('gender') }}</mat-hint>
                         </mat-form-field>
                     </div>
 

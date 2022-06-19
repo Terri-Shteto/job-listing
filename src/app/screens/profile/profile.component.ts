@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FirebaseError } from '@angular/fire/app';
-import { Auth } from '@angular/fire/auth';
 import { Firestore, doc, updateDoc } from '@angular/fire/firestore';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
+
+import { AppService } from '../../app.service';
 
 @Component({
   selector: 'app-profile',
@@ -14,16 +14,26 @@ export class ProfileComponent implements OnInit {
   public profileForm: FormGroup;
 
   constructor(
-    private auth: Auth,
     private firestore: Firestore,
     private snackBar: MatSnackBar,
+    private appService: AppService,
     private formBuilder: FormBuilder,
   ) {
     this.profileForm = this.formBuilder.group({
-      phone: ['', Validators.compose([
+      firstName: [this.appService.userData.firstName || '', Validators.compose([
         Validators.required,
       ])],
-      gender: ['', Validators.compose([])],
+      lastName: [this.appService.userData.lastName || '', Validators.compose([
+        Validators.required,
+      ])],
+      email: [this.appService.userData.email || this.appService.user?.email || '', Validators.compose([
+        Validators.required,
+        Validators.email,
+      ])],
+      phone: [this.appService.userData.phone || '', Validators.compose([
+        Validators.required,
+      ])],
+      gender: [this.appService.userData.gender || '', Validators.compose([])],
     });
   }
 
@@ -32,7 +42,7 @@ export class ProfileComponent implements OnInit {
   public async updateProfile() {
     const fields = this.profileForm.value;
 
-    const user = this.auth.currentUser;
+    const user = this.appService.user;
     const userRef = doc(this.firestore, `users/${user?.uid}`);
 
     await updateDoc(userRef, fields);
@@ -65,6 +75,16 @@ export class ProfileComponent implements OnInit {
     const errorName = this.getError(controlName);
 
     return ({
+      firstName: {
+        required: 'First name is required!',
+      },
+      lastName: {
+        required: 'Last name is required!',
+      },
+      email: {
+        required: 'Email is required!',
+        email: 'Must be a valid email!',
+      },
       phone: {
         required: 'Phone is required!',
       },
@@ -73,5 +93,4 @@ export class ProfileComponent implements OnInit {
       },
     }[controlName] as any)[errorName] || 'Invalid field!';
   }
-
 }

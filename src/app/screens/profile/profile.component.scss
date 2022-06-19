@@ -29,12 +29,12 @@
         width: 300px;
     }
 
-    &__bg {
-        padding: 1rem 0.5rem;
-        margin-top: 1.5rem;
-        color: black;
-        background-color: lightgray;
-        border-radius: 0.25rem;
+    &__header {
+        padding-top: 2rem;
+    }
+
+    &__error {
+        color: red;
     }
 }
 

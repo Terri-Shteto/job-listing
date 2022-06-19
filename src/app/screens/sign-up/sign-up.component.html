@@ -1,43 +1,59 @@
 <div class="c-sign-up">
     <div class="c-sign-up__container">
-        <form
-            class="c-sign-up__form"
-            [formGroup]="signUpForm"
-            (ngSubmit)="signUp()"
-        >
+        <form [formGroup]="signUpForm" (ngSubmit)="signUp()" class="c-sign-up__form">
             <h1>Sign up</h1>
 
             <div class="w-full">
                 <mat-form-field appearance="outline" class="w-full">
                     <mat-label>Email</mat-label>
-
-                    <input
-                        matInput
-                        type="email"
-                        autocomplete="off"
-                        formControlName="email"
-                    />
-
-                    <mat-hint *ngIf="getError('email')" [ngStyle]="{ color: 'red' }">
-                        {{ getErrorMessage('email') }}
-                    </mat-hint>
+                    <input matInput type="email" autocomplete="off" formControlName="email" />
+                    <mat-hint *ngIf="getError('email')" class="c-sign-up__error">{{ getErrorMessage('email') }}</mat-hint>
                 </mat-form-field>
             </div>
 
             <div class="w-full">
                 <mat-form-field appearance="outline" class="w-full">
                     <mat-label>Password</mat-label>
+                    <input matInput type="password" autocomplete="off" formControlName="password" />
+                    <mat-hint *ngIf="getError('password')" class="c-sign-up__error">{{ getErrorMessage('password') }}</mat-hint>
+                </mat-form-field>
+            </div>
 
-                    <input
-                        matInput
-                        type="password"
-                        autocomplete="off"
-                        formControlName="password"
-                    />
+            <div class="w-full">
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>First name</mat-label>
+                    <input matInput type="text" autocomplete="off" formControlName="firstName" />
+                    <mat-hint *ngIf="getError('firstName')" class="c-sign-up__error">{{ getErrorMessage('firstName') }}</mat-hint>
+                </mat-form-field>
+            </div>
 
-                    <mat-hint *ngIf="getError('password')" [ngStyle]="{ color: 'red' }">
-                        {{ getErrorMessage('password') }}
-                    </mat-hint>
+            <div class="w-full">
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Last name</mat-label>
+                    <input matInput type="text" autocomplete="off" formControlName="lastName" />
+                    <mat-hint *ngIf="getError('lastName')" class="c-sign-up__error">{{ getErrorMessage('lastName') }}</mat-hint>
+                </mat-form-field>
+            </div>
+
+            <div class="w-full">
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Phone number</mat-label>
+                    <input matInput type="phone" autocomplete="off" formControlName="phone" />
+                    <mat-hint *ngIf="getError('phone')" class="c-sign-up__error">{{ getErrorMessage('phone') }}</mat-hint>
+                </mat-form-field>
+            </div>
+
+            <div class="w-full">
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Gender</mat-label>
+
+                    <mat-select formControlName="gender">
+                        <mat-option value="">Select</mat-option>
+                        <mat-option value="F">Female</mat-option>
+                        <mat-option value="M">Male</mat-option>
+                    </mat-select>
+
+                    <mat-hint *ngIf="getError('gender')" class="c-sign-up__error">{{ getErrorMessage('gender') }}</mat-hint>
                 </mat-form-field>
             </div>
 
@@ -49,9 +65,7 @@
                     <mat-radio-button class="role-radio-button" value="recruiter">Recruiter</mat-radio-button>
                 </mat-radio-group>
 
-                <mat-hint *ngIf="getError('role')" [ngStyle]="{ color: 'red' }">
-                    {{ getErrorMessage('role') }}
-                </mat-hint>
+                <mat-hint *ngIf="getError('role')" class="c-sign-up__error">{{ getErrorMessage('role') }}</mat-hint>
             </div>
 
             <div class="w-full">

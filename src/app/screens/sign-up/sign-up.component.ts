@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FirebaseError } from '@angular/fire/app';
-import { Auth, createUserWithEmailAndPassword, UserCredential } from '@angular/fire/auth';
+import { UserCredential, createUserWithEmailAndPassword } from '@angular/fire/auth';
 import { Firestore, doc, setDoc } from '@angular/fire/firestore';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
+
+import { AppService } from '../../app.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -14,7 +16,7 @@ export class SignUpComponent implements OnInit {
   public signUpForm: FormGroup;
 
   constructor(
-    private auth: Auth,
+    private appService: AppService,
     private firestore: Firestore,
     private snackBar: MatSnackBar,
     private formBuilder: FormBuilder,
@@ -28,9 +30,19 @@ export class SignUpComponent implements OnInit {
         Validators.required,
         Validators.minLength(6),
       ])],
+      firstName: ['', Validators.compose([
+        Validators.required,
+      ])],
+      lastName: ['', Validators.compose([
+        Validators.required,
+      ])],
       role: ['', Validators.compose([
         Validators.required,
       ])],
+      phone: ['', Validators.compose([
+        Validators.required,
+      ])],
+      gender: ['', Validators.compose([])],
     });
   }
 
@@ -39,7 +51,7 @@ export class SignUpComponent implements OnInit {
   public signUp() {
     const { email, password } = this.signUpForm.value;
 
-    createUserWithEmailAndPassword(this.auth, email, password)
+    createUserWithEmailAndPassword(this.appService.auth, email, password)
       .then(response => this.handleRegistrationSuccess(response))
       .catch(error => this.handleRegistrationFailure(error))
     ;
@@ -48,11 +60,11 @@ export class SignUpComponent implements OnInit {
   protected async handleRegistrationSuccess(response: UserCredential) {
     const userId = response.user.uid;
     const userRef = doc(this.firestore, `users/${userId}`);
-    const formData = this.signUpForm.value;
 
-    await setDoc(userRef, {
-      role: formData.role,
-    });
+    // Remove password from user data because it is saved in auth module.
+    const { password: _, ...data } = this.signUpForm.value;
+
+    await setDoc(userRef, data);
 
     this.showSnackBar('Sign-up complete!');
   }
@@ -101,8 +113,20 @@ export class SignUpComponent implements OnInit {
         required: 'Password is required',
         minlength: 'Password must less than 6 characters!',
       },
+      firstName: {
+        required: 'First name is required!',
+      },
+      lastName: {
+        required: 'Last name is required!',
+      },
       role: {
         required: 'Role is required',
+      },
+      phone: {
+        required: 'Phone is required!',
+      },
+      gender: {
+        required: 'Gender is required',
       },
     }[controlName] as any)[errorName] || 'Invalid field!';
   }
