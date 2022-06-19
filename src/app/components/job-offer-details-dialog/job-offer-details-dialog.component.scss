@@ -3,6 +3,7 @@
         display: flex;
         justify-content: space-between;
         align-items: flex-end;
+        flex-wrap: wrap;
 
         &-group {
             flex: 1 1 auto;
@@ -12,4 +13,19 @@
 
 .button-icon {
     margin-right: 0.5rem;
+}
+
+@media (max-width: 576px) {
+    .c-job-offer-details {
+        &__actions {
+            &-group {
+                padding: 0.75rem 0;
+
+                > * {
+                    width: 100%;
+                    margin: 0.5rem 0;
+                }
+            }
+        }
+    }
 }
