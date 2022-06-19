@@ -42,9 +42,17 @@ export class JobOfferFormDialogComponent {
   }
 
   public submitForm() {
-    const data = this.jobForm.value;
     const jobOfferId = this.data.jobOffer?.id || '';
     const action = jobOfferId ? 'update' : 'create';
+    const data = this.jobForm.value;
+
+    this.data.onClick(jobOfferId, action, data);
+  }
+
+  public deleteJobOffer() {
+    const jobOfferId = this.data.jobOffer?.id || '';
+    const action = 'delete';
+    const data = {};
 
     this.data.onClick(jobOfferId, action, data);
   }

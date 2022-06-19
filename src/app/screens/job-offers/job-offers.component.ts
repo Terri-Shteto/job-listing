@@ -64,6 +64,9 @@ export class JobOffersComponent implements OnInit {
       case 'create':
         this.createJobOffer(data);
         break;
+      case 'delete':
+        this.deleteJobOffer(jobOfferId);
+        break;
       default:
         this.dialogRef?.close();
     }
@@ -82,6 +85,12 @@ export class JobOffersComponent implements OnInit {
       recruiterId: this.appService.user?.uid,
       ...data,
     });
+
+    this.dialogRef?.close();
+  }
+
+  public async deleteJobOffer(jobOfferId: string) {
+    await this.appService.deleteJobOffer(jobOfferId);
 
     this.dialogRef?.close();
   }

@@ -54,6 +54,14 @@
             mat-stroked-button
             mat-dialog-close
         >Cancel</button>
+
+        <button
+            mat-button
+            mat-flat-button
+            color="warn"
+            *ngIf="data.jobOffer"
+            (click)="deleteJobOffer()"
+        >Delete</button>
     </mat-dialog-actions>
 
     <mat-dialog-actions align="end" class="c-job-offer-form__actions-group">
