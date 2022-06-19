@@ -1,5 +1,6 @@
 <section class="c-job-applications container">
-    <h1>My job applications</h1>
+    <h1 *ngIf="appService.userData.role === 'seeker'">My job applications</h1>
+    <h1 *ngIf="appService.userData.role === 'recruiter'">Job Applications</h1>
 
     <app-job-list-table
         [jobOffers]="jobOffers"

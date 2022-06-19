@@ -1,33 +1,63 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { Auth } from '@angular/fire/auth';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Firestore, query, collection, addDoc, onSnapshot, where } from '@angular/fire/firestore';
+import { Component, OnInit } from '@angular/core';
+import { onSnapshot, QueryConstraint, where } from '@angular/fire/firestore';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+
+import { AppService } from 'src/app/app.service';
+import {
+  JobOfferDetailsDialogConfig,
+  JobOfferDetailsDialogComponent,
+} from 'src/app/components/job-offer-details-dialog/job-offer-details-dialog.component';
 
 @Component({
   selector: 'app-job-applications',
   templateUrl: './job-applications.component.html',
-  styleUrls: ['./job-applications.component.scss']
+  styleUrls: ['./job-applications.component.scss'],
 })
 export class JobApplicationsComponent implements OnInit {
   public jobOffers: any[] = [];
   public jobApplications: string[] = [];
-  public dialogRef: MatDialogRef<JobApplicationDetailsDialog>|null = null;
+  public dialogRef: MatDialogRef<JobOfferDetailsDialogComponent>|null = null;
 
   constructor(
-    private auth: Auth,
-    private dialog: MatDialog,
-    private firestore: Firestore,
+    protected dialog: MatDialog,
+    protected appService: AppService,
   ) { }
 
   public ngOnInit(): void {
-    this.getJobApplications();
+    const role = this.appService.userData.role;
+
+    switch (role) {
+      case 'seeker':
+        this.getJobApplicationsForUser();
+        break;
+      case 'recruiter':
+        this.getJobApplicationsForRecruiter();
+        break;
+    }
   }
 
-  public getJobApplications() {
-    const jobApplicationCollection = collection(this.firestore, 'jobApplications');
-    const jobApplicationQuery = query(jobApplicationCollection, ...[
-      where('userId', '==', this.auth.currentUser?.uid),
+  public getJobApplicationsForUser() {
+    this.getJobApplications([
+      where('userId', '==', this.appService.user?.uid),
     ]);
+  }
+
+  public getJobApplicationsForRecruiter() {
+    const jobOfferQuery = this.appService.jobOfferQuery([
+      where('recruiterId', '==', this.appService.user?.uid),
+    ]);
+
+    onSnapshot(jobOfferQuery, (querySnapshot) => {
+      const jobOfferIds = querySnapshot.docs.map((docSnapshot) => docSnapshot.id);
+
+      this.getJobApplications([
+        where('jobOfferId', 'in', jobOfferIds),
+      ]);
+    });
+  }
+
+  public getJobApplications(filters: QueryConstraint[] = []) {
+    const jobApplicationQuery = this.appService.jobApplicationQuery(filters);
 
     onSnapshot(jobApplicationQuery, (querySnapshot) => {
       this.jobApplications = querySnapshot.docs.map((docSnapshot) => {
@@ -39,8 +69,11 @@ export class JobApplicationsComponent implements OnInit {
   }
 
   public getJobOffers() {
-    const jobOfferCollection = collection(this.firestore, 'jobOffers');
-    const jobOfferQuery = query(jobOfferCollection, ...[
+    if (!this.jobApplications.length) {
+      return;
+    }
+
+    const jobOfferQuery = this.appService.jobOfferQuery([
       where('__name__', 'in', this.jobApplications),
     ]);
 
@@ -51,18 +84,16 @@ export class JobApplicationsComponent implements OnInit {
           ...docSnapshot.data(),
         };
       });
-
-      console.log(this.jobOffers);
     });
   }
 
   public showJobOfferDetails(jobOfferId: string) {
-    this.dialogRef = this.dialog.open(JobApplicationDetailsDialog, {
+    this.dialogRef = this.dialog.open(JobOfferDetailsDialogComponent, {
       width: '768px',
       data: {
         jobOffer: this.getJobOffer(jobOfferId),
         onClick: this.handleModalClick.bind(this),
-      } as JobApplicationDetailsDialogConfig,
+      } as JobOfferDetailsDialogConfig,
     });
   }
 
@@ -70,13 +101,19 @@ export class JobApplicationsComponent implements OnInit {
     return this.jobOffers.find((jobOffer) => jobOffer.id === jobOfferId);
   }
 
-  public handleModalClick(jobOfferId: string, action: string) {
+  public handleModalClick(id: string, action: string) {
     switch (action) {
       case 'apply':
-        this.applyForJob(jobOfferId);
+        this.applyForJob(id);
+        break;
+      case 'cancel':
+        this.cancelJobApplication(id);
         break;
       case 'favorite':
-        this.markAsFavorite(jobOfferId);
+        this.markAsFavorite(id);
+        break;
+      case 'unfavorite':
+        this.removeFromFavorites(id);
         break;
       default:
         this.dialogRef?.close();
@@ -84,39 +121,28 @@ export class JobApplicationsComponent implements OnInit {
   }
 
   public async applyForJob(jobOfferId: string) {
-    const userId = this.auth.currentUser?.uid;
-    const jobApplicationsRef = collection(this.firestore, 'jobApplications');
-
-    await addDoc(jobApplicationsRef, {
-      userId,
-      jobOfferId,
+    await this.appService.addJobApplication({
+      userId: this.appService.user?.uid,
+      jobOfferId: jobOfferId,
     });
 
-    console.log('applying for job', jobOfferId);
+    this.dialogRef?.close();
+  }
+
+  public async cancelJobApplication(jobApplicationId: string) {
+    await this.appService.deleteJobApplication(jobApplicationId);
 
     this.dialogRef?.close();
   }
 
   public async markAsFavorite(jobOfferId: string) {
-    console.log('marking job as favorite', jobOfferId);
-
-    this.dialogRef?.close();
+    await this.appService.addJobFavorite({
+      userId: this.appService.user?.uid,
+      jobOfferId: jobOfferId,
+    });
   }
 
-}
-
-interface JobApplicationDetailsDialogConfig {
-  jobOffer: any,
-  onClick: (jobOfferId: string, action: string) => void,
-}
-
-@Component({
-  selector: 'job-application-details-dialog',
-  templateUrl: '../../components/dialogs/job-application-details-dialog.html',
-})
-export class JobApplicationDetailsDialog {
-  constructor(
-    public dialogRef: MatDialogRef<JobApplicationDetailsDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: JobApplicationDetailsDialogConfig,
-  ) {}
+  public async removeFromFavorites(jobFavoriteId: string) {
+    await this.appService.deleteJobFavorite(jobFavoriteId);
+  }
 }

@@ -1,0 +1,60 @@
+<h2 mat-dialog-title>{{ data.jobOffer.companyName }}</h2>
+
+<mat-dialog-content class="mat-typography">
+    <h3>{{ data.jobOffer.role }}</h3>
+
+    <p>Required experience: {{ data.jobOffer.experience }}</p>
+</mat-dialog-content>
+
+<div class="c-job-offer-details__actions" [ngStyle]="{ visibility: loading ? 'hidden' : 'visible' }">
+    <mat-dialog-actions align="start" class="c-job-offer-details__actions-group">
+        <button
+            color="warn"
+            mat-button
+            mat-stroked-button
+            mat-dialog-close
+        >Close</button>
+
+        <button
+            mat-button
+            mat-flat-button
+            color="primary"
+            *ngIf="role === 'seeker' && application"
+            (click)="data.onClick(application.id, 'cancel')"
+        >Cancel application</button>
+    </mat-dialog-actions>
+
+    <mat-dialog-actions align="end" class="c-job-offer-details__actions-group">
+        <button
+            mat-button
+            mat-stroked-button
+            *ngIf="role === 'seeker' && !favorite"
+            [disabled]="false"
+            (click)="data.onClick(data.jobOffer.id, 'favorite')"
+        >
+            <mat-icon class="button-icon">star</mat-icon>
+            <span>Mark as favorite</span>
+        </button>
+
+        <button
+            mat-button
+            mat-flat-button
+            color="accent"
+            *ngIf="role === 'seeker' && favorite"
+            [disabled]="false"
+            (click)="data.onClick(favorite.id, 'unfavorite')"
+        >
+            <mat-icon class="button-icon">star</mat-icon>
+            <span>Remove from favorites</span>
+        </button>
+
+        <button
+            mat-button
+            mat-flat-button
+            color="primary"
+            *ngIf="role === 'seeker'"
+            [disabled]="application"
+            (click)="data.onClick(data.jobOffer.id, 'apply')"
+        >Apply</button>
+    </mat-dialog-actions>
+</div>

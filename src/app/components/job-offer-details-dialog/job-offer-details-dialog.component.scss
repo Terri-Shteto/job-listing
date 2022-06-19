@@ -1,0 +1,15 @@
+.c-job-offer-details {
+    &__actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+
+        &-group {
+            flex: 1 1 auto;
+        }
+    }
+}
+
+.button-icon {
+    margin-right: 0.5rem;
+}

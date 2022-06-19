@@ -43,14 +43,7 @@ export class SignInComponent implements OnInit {
   }
 
   protected async handleSignInSuccess(response: UserCredential) {
-    const userId = response.user.uid;
-    const userRef = doc(this.firestore, `users/${userId}`);
-
-    const userSnapshot = await getDoc(userRef);
-    const userData = userSnapshot.data();
-
-    console.log({ userData });
-
+    console.log({ response });
     this.showSnackBar('Sign-in complete!');
   }
 

@@ -17,8 +17,11 @@
     white-space: nowrap;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
+    transition: 200ms;
 }
 
 .mat-row:hover .mat-cell {
+    cursor: pointer;
+    background-color: rgba($color: white, $alpha: 0.1);
     border-color: currentColor;
 }

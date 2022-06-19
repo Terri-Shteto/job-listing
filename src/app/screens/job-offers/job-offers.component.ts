@@ -1,8 +1,12 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { Auth } from '@angular/fire/auth';
-import { collection, query, onSnapshot, Firestore, where, doc, updateDoc, addDoc } from '@angular/fire/firestore';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, OnInit } from '@angular/core';
+import { query, onSnapshot, Firestore, where } from '@angular/fire/firestore';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+
+import { AppService } from 'src/app/app.service';
+import {
+  JobOfferFormDialogConfig,
+  JobOfferFormDialogComponent,
+} from 'src/app/components/job-offer-form-dialog/job-offer-form-dialog.component';
 
 @Component({
   selector: 'app-job-offers',
@@ -11,22 +15,18 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 })
 export class JobOffersComponent implements OnInit {
   public jobOffers: any[] = [];
-  public loading: boolean = false;
-  public dialogRef: MatDialogRef<JobOfferFormDialog>|null = null;
+  public dialogRef: MatDialogRef<JobOfferFormDialogComponent>|null = null;
 
   constructor(
-    protected auth: Auth,
     protected dialog: MatDialog,
     protected firestore: Firestore,
+    protected appService: AppService,
   ) { }
 
   async ngOnInit(): Promise<void> {
-    const jobOfferCollection = collection(this.firestore, 'jobOffers');
-    const jobOfferConstraints = [
-      where('recruiterId', '==', this.auth.currentUser?.uid),
-    ];
-
-    const jobOfferQuery = query(jobOfferCollection, ...jobOfferConstraints);
+    const jobOfferQuery = query(this.appService.jobOfferCollection(), ...[
+      where('recruiterId', '==', this.appService.user?.uid),
+    ]);
 
     onSnapshot(jobOfferQuery, (querySnapshot) => {
       this.jobOffers = querySnapshot.docs.map(docSnapshot => ({
@@ -37,7 +37,7 @@ export class JobOffersComponent implements OnInit {
   }
 
   public showJobOfferForm(jobOfferId?: string) {
-    this.dialogRef = this.dialog.open(JobOfferFormDialog, {
+    this.dialogRef = this.dialog.open(JobOfferFormDialogComponent, {
       width: '768px',
       data: {
         jobOffer: jobOfferId ? this.getJobOffer(jobOfferId) : null,
@@ -70,109 +70,19 @@ export class JobOffersComponent implements OnInit {
   }
 
   public async updateJobOffer(jobOfferId: string, data: any) {
-    const jobOfferDoc = doc(this.firestore, `jobOffers/${jobOfferId}`);
-
-    this.toggleLoading(true);
-    await updateDoc(jobOfferDoc, data);
-    this.toggleLoading(false);
+    await this.appService.updateJobOffer(jobOfferId, {
+      ...data,
+    });
 
     this.dialogRef?.close();
   }
 
   public async createJobOffer(data: any) {
-    const userId = this.auth.currentUser?.uid;
-    const jobOffersRef = collection(this.firestore, 'jobOffers');
-
-    this.toggleLoading(true);
-    await addDoc(jobOffersRef, { recruiterId: userId, ...data });
-    this.toggleLoading(false);
+    await this.appService.addJobOffer({
+      recruiterId: this.appService.user?.uid,
+      ...data,
+    });
 
     this.dialogRef?.close();
-  }
-
-  public toggleLoading(toggle?: boolean) {
-    this.loading = toggle === undefined ? !this.loading : toggle;
-  }
-}
-
-interface JobOfferFormDialogConfig {
-  jobOffer: any,
-  onClick: (jobOfferId: string, action: string, data: any) => void,
-}
-
-@Component({
-  selector: 'job-offer-form-dialog',
-  templateUrl: '../../components/dialogs/job-offer-form-dialog.html',
-})
-export class JobOfferFormDialog {
-  public jobForm: FormGroup;
-
-  constructor(
-    public formBuilder: FormBuilder,
-    public dialogRef: MatDialogRef<JobOfferFormDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: JobOfferFormDialogConfig,
-  ) {
-    const jobOffer = this.data.jobOffer;
-
-    this.jobForm = this.formBuilder.group({
-      companyName: [jobOffer?.companyName || '', Validators.compose([
-        Validators.required,
-      ])],
-      experience: [jobOffer?.experience || '', Validators.compose([
-        Validators.required,
-      ])],
-      role: [jobOffer?.role || '', Validators.compose([
-        Validators.required,
-      ])],
-      skills: [jobOffer?.skills || '', Validators.compose([
-        Validators.required,
-      ])],
-      type: [jobOffer?.type || '', Validators.compose([
-        Validators.required,
-      ])],
-    });
-  }
-
-  public submitForm() {
-    const data = this.jobForm.value;
-    const jobOfferId = this.data.jobOffer?.id || '';
-    const action = jobOfferId ? 'update' : 'create';
-
-    this.data.onClick(jobOfferId, action, data);
-  }
-
-  public hasError(controlName: string) {
-    const control = this.jobForm.controls[controlName];
-    return control.invalid && (control.dirty || control.touched);
-  }
-
-  public getError(controlName: string) {
-    if (!this.hasError(controlName)) {
-      return '';
-    }
-
-    return Object.keys(this.jobForm.controls[controlName].errors || {})[0];
-  }
-
-  public getErrorMessage(controlName: string) {
-    const errorName = this.getError(controlName);
-
-    return ({
-      companyName: {
-        required: 'Company name is required!',
-      },
-      experience: {
-        required: 'Experience is required!',
-      },
-      role: {
-        required: 'Role is required!',
-      },
-      skills: {
-        required: 'Skills is required!',
-      },
-      type: {
-        required: 'Type is required!',
-      },
-    }[controlName] as any)[errorName] || 'Invalid field!';
   }
 }

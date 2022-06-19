@@ -27,7 +27,7 @@
                     <span>Job Favorites</span>
                 </a>
 
-                <a *ngIf="user && userData['role'] === 'seeker'" mat-list-item routerLink="job-applications">
+                <a *ngIf="user" mat-list-item routerLink="job-applications">
                     <button mat-icon-button><mat-icon>work</mat-icon></button>
                     <span>Job Applications</span>
                 </a>

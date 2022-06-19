@@ -30,17 +30,19 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 // Screen imports.
-import { HomeComponent, JobOfferDetailsDialog } from './screens/home/home.component';
+import { HomeComponent } from './screens/home/home.component';
 import { SignInComponent } from './screens/sign-in/sign-in.component';
 import { SignUpComponent } from './screens/sign-up/sign-up.component';
 import { SignOutComponent } from './screens/sign-out/sign-out.component';
 import { ProfileComponent } from './screens/profile/profile.component';
-import { JobOffersComponent, JobOfferFormDialog } from './screens/job-offers/job-offers.component';
-import { JobFavoritesComponent, JobFavoriteDetailsDialog } from './screens/job-favorites/job-favorites.component';
-import { JobApplicationsComponent, JobApplicationDetailsDialog } from './screens/job-applications/job-applications.component';
+import { JobOffersComponent } from './screens/job-offers/job-offers.component';
+import { JobFavoritesComponent } from './screens/job-favorites/job-favorites.component';
+import { JobApplicationsComponent } from './screens/job-applications/job-applications.component';
 
 // Component imports.
 import { JobListTableComponent } from './components/job-list-table/job-list-table.component';
+import { JobOfferFormDialogComponent } from './components/job-offer-form-dialog/job-offer-form-dialog.component';
+import { JobOfferDetailsDialogComponent } from './components/job-offer-details-dialog/job-offer-details-dialog.component';
 
 @NgModule({
   declarations: [
@@ -57,10 +59,8 @@ import { JobListTableComponent } from './components/job-list-table/job-list-tabl
 
     // Components.
     JobListTableComponent,
-    JobOfferFormDialog,
-    JobOfferDetailsDialog,
-    JobFavoriteDetailsDialog,
-    JobApplicationDetailsDialog,
+    JobOfferFormDialogComponent,
+    JobOfferDetailsDialogComponent,
   ],
 
   imports: [

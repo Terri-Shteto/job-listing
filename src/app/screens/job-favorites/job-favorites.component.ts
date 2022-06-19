@@ -1,22 +1,26 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { Auth } from '@angular/fire/auth';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Firestore, query, collection, addDoc, onSnapshot, where } from '@angular/fire/firestore';
+import { Component, OnInit } from '@angular/core';
+import { onSnapshot, where } from '@angular/fire/firestore';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+
+import { AppService } from 'src/app/app.service';
+import {
+  JobOfferDetailsDialogConfig,
+  JobOfferDetailsDialogComponent,
+} from 'src/app/components/job-offer-details-dialog/job-offer-details-dialog.component';
 
 @Component({
   selector: 'app-job-favorites',
   templateUrl: './job-favorites.component.html',
-  styleUrls: ['./job-favorites.component.scss']
+  styleUrls: ['./job-favorites.component.scss'],
 })
 export class JobFavoritesComponent implements OnInit {
   public jobOffers: any[] = [];
   public jobFavorites: string[] = [];
-  public dialogRef: MatDialogRef<JobFavoriteDetailsDialog>|null = null;
+  public dialogRef: MatDialogRef<JobOfferDetailsDialogComponent>|null = null;
 
   constructor(
-    private auth: Auth,
     private dialog: MatDialog,
-    private firestore: Firestore,
+    private appService: AppService,
   ) { }
 
   public ngOnInit(): void {
@@ -24,9 +28,8 @@ export class JobFavoritesComponent implements OnInit {
   }
 
   public getJobFavorites() {
-    const jobFavoriteCollection = collection(this.firestore, 'jobFavorites');
-    const jobFavoriteQuery = query(jobFavoriteCollection, ...[
-      where('userId', '==', this.auth.currentUser?.uid),
+    const jobFavoriteQuery = this.appService.jobFavoriteQuery([
+      where('userId', '==', this.appService.user?.uid),
     ]);
 
     onSnapshot(jobFavoriteQuery, (querySnapshot) => {
@@ -43,8 +46,7 @@ export class JobFavoritesComponent implements OnInit {
       return;
     }
 
-    const jobOfferCollection = collection(this.firestore, 'jobOffers');
-    const jobOfferQuery = query(jobOfferCollection, ...[
+    const jobOfferQuery = this.appService.jobOfferQuery([
       where('__name__', 'in', this.jobFavorites),
     ]);
 
@@ -59,12 +61,12 @@ export class JobFavoritesComponent implements OnInit {
   }
 
   public showJobOfferDetails(jobOfferId: string) {
-    this.dialogRef = this.dialog.open(JobFavoriteDetailsDialog, {
+    this.dialogRef = this.dialog.open(JobOfferDetailsDialogComponent, {
       width: '768px',
       data: {
         jobOffer: this.getJobOffer(jobOfferId),
         onClick: this.handleModalClick.bind(this),
-      } as JobFavoriteDetailsDialogConfig,
+      } as JobOfferDetailsDialogConfig,
     });
   }
 
@@ -72,13 +74,19 @@ export class JobFavoritesComponent implements OnInit {
     return this.jobOffers.find((jobOffer) => jobOffer.id === jobOfferId);
   }
 
-  public handleModalClick(jobOfferId: string, action: string) {
+  public handleModalClick(id: string, action: string) {
     switch (action) {
       case 'apply':
-        this.applyForJob(jobOfferId);
+        this.applyForJob(id);
+        break;
+      case 'cancel':
+        this.cancelJobApplication(id);
         break;
       case 'favorite':
-        this.markAsFavorite(jobOfferId);
+        this.markAsFavorite(id);
+        break;
+      case 'unfavorite':
+        this.removeFromFavorites(id);
         break;
       default:
         this.dialogRef?.close();
@@ -86,39 +94,28 @@ export class JobFavoritesComponent implements OnInit {
   }
 
   public async applyForJob(jobOfferId: string) {
-    const userId = this.auth.currentUser?.uid;
-    const jobApplicationsRef = collection(this.firestore, 'jobApplications');
-
-    await addDoc(jobApplicationsRef, {
-      userId,
-      jobOfferId,
+    await this.appService.addJobApplication({
+      userId: this.appService.user?.uid,
+      jobOfferId: jobOfferId,
     });
 
-    console.log('applying for job', jobOfferId);
+    this.dialogRef?.close();
+  }
+
+  public async cancelJobApplication(jobApplicationId: string) {
+    await this.appService.deleteJobApplication(jobApplicationId);
 
     this.dialogRef?.close();
   }
 
   public async markAsFavorite(jobOfferId: string) {
-    console.log('marking job as favorite', jobOfferId);
-
-    this.dialogRef?.close();
+    await this.appService.addJobFavorite({
+      userId: this.appService.user?.uid,
+      jobOfferId: jobOfferId,
+    });
   }
 
-}
-
-interface JobFavoriteDetailsDialogConfig {
-  jobOffer: any,
-  onClick: (jobOfferId: string, action: string) => void,
-}
-
-@Component({
-  selector: 'job-application-details-dialog',
-  templateUrl: '../../components/dialogs/job-application-details-dialog.html',
-})
-export class JobFavoriteDetailsDialog {
-  constructor(
-    public dialogRef: MatDialogRef<JobFavoriteDetailsDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: JobFavoriteDetailsDialogConfig,
-  ) {}
+  public async removeFromFavorites(jobFavoriteId: string) {
+    await this.appService.deleteJobFavorite(jobFavoriteId);
+  }
 }

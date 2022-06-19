@@ -1,0 +1,22 @@
+.c-job-offer-form {
+    display: flex;
+    flex-direction: column;
+
+    &__actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+
+        &-group {
+            flex: 1 1 auto;
+        }
+    }
+}
+
+.hidden {
+    display: none;
+}
+
+.error {
+    color: red;
+}
